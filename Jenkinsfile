@@ -12,7 +12,7 @@ pipeline{
 			//Building and tagging our Docker image
 			//rename the user name michaelgwei86 with the username of your dockerhub repo
 			steps {
-				sh 'docker build -t michaelgwei86/effulgencetech-nodejs-image:v1.0 .'
+				sh 'docker build -t michaelgwei86/effulgencetech-nodejs-image:+$(env.BUILD_NUMBER) .'
 				sh 'docker images'
 			}
 		}
@@ -28,7 +28,7 @@ pipeline{
 			//Building and tagging our Docker container
 			//rename the user name michaelgwei86 with the username of your dockerhub repo
 			steps {
-				sh 'docker run --name effulgencetech-nodejs-cont -p 80:8081 -d michaelgwei86/effulgencetech-nodejs-image:v1.0'
+				sh 'docker run --name effulgencetech-node-cont:+$(env.BUILD.NUMBER) -p 8081:8081 -d michaelgwei86/effulgencetech-nodejs-image:+$(env.BUILD_NUMBER)'
 				sh 'docker ps'
 			}
 		}
