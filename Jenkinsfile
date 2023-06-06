@@ -1,5 +1,6 @@
 
 def BUILD_NUMBER = env.BUILD_NUMBER
+def registry = credentials('aws-ecr-repo-cred')
 
 pipeline{
 
@@ -8,8 +9,7 @@ pipeline{
 	environment {
 		DOCKERHUB_CREDENTIALS=credentials('DOCKERHUB_CREDENTIALS')
 	    AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
-    	AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
-		registry = credentials('aws-ecr-repo-cred')	
+    	AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')	
 	}
 
 	stages {
@@ -40,25 +40,26 @@ pipeline{
 		}
 
 
-		stage('Push-image-Dockerhub') {
+		stage('Push to Dockerhub') {
 			//Pushing image to dockerhub
 			steps {
 				sh 'docker push michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER'
 			}
 		}
 
-		stage('Push-image-ECR') {
-			//Pushing image to Amazon ECR
-			steps {
-				script {  
-                    sh "echo ${AWS_ACCESS_KEY_ID} | docker login --username AWS --password-stdin ${registry}"
-					sh "docker push ${registry}/michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER"    
-                }
+        stage('Push to ECR') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'ecr-credentials', 
+                                         usernameVariable: 'AWS_ACCESS_KEY_ID', 
+                                         passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) 
+							{
+                    // Login to ECR            
+                    sh "echo $AWS_ACCESS_KEY_ID | docker login --username AWS --password-stdin ${registry}"             
+                    sh "docker push ${registry}/michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER"
+                }   
             }
         }
-
 	}
-
     post { 
         always { 
             echo 'I will always say Hello again!'
