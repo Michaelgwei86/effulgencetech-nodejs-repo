@@ -7,6 +7,9 @@ pipeline{
 
 	environment {
 		DOCKERHUB_CREDENTIALS=credentials('DOCKERHUB_CREDENTIALS')
+	    AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
+    	AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+		registry = credentials('aws-ecr-repo-cred')	
 	}
 
 	stages {
@@ -37,12 +40,23 @@ pipeline{
 		}
 
 
-		stage('Push-image') {
+		stage('Push-image-Dockerhub') {
 			//Pushing image to dockerhub
 			steps {
 				sh 'docker push michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER'
 			}
 		}
+
+		stage('Push-image-ECR') {
+			//Pushing image to Amazon ECR
+			steps {
+				script {  
+                    sh "echo ${AWS_ACCESS_KEY_ID} | docker login --username AWS --password-stdin ${registry}"
+					sh "docker push ${registry}/michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER"    
+                }
+            }
+        }
+
 	}
 
     post { 
