@@ -1,5 +1,5 @@
 
-def buildNumber = env.BUILD_NUMBER
+def BUILD_NUMBER = env.BUILD_NUMBER
 
 pipeline{
 
@@ -15,7 +15,7 @@ pipeline{
 			//Building and tagging our Docker image
 			//rename the user name michaelgwei86 with the username of your dockerhub repo
 			steps {
-				sh 'docker build -t michaelgwei86/effulgencetech-nodejs-image:$buildNumber .'
+				sh 'docker build -t michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER .'
 				sh 'docker images'
 			}
 		}
