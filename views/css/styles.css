@@ -34,7 +34,7 @@ p {
     text-color: #1cafb1;
     border-color: white;
     margin-bottom: 5px;
-    }
+}
 
 img,
 video,
@@ -47,4 +47,3 @@ div.caption: {
     float: left;
     clear: both;
 }
-
