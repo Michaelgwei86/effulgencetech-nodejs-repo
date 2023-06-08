@@ -1,6 +1,8 @@
 
-def BUILD_NUMBER = env.BUILD_NUMBER
-def registry = credentials('aws-ecr-repo-cred')
+def COLOR_MAP = [
+    'SUCCESS': 'good', 
+    'FAILURE': 'danger',
+]
 
 pipeline{
 
