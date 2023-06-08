@@ -44,7 +44,7 @@ pipeline{
 			//rename the user name michaelgwei86 with the username of your dockerhub repo
 			steps {
 				//sh 'docker run --name effulgencetech-node-cont-$BUILD_NUMBER -p 8082:8080 -d michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER'
-				sh 'docker run --name $CONTAINER_NAME-$BUILD_NUMBER -p 8089:8080 -d $IMAGE_REPO_NAME:$BUILD_NUMBER'
+				sh 'docker run --name $CONTAINER_NAME-$BUILD_NUMBER -p 8088:8080 -d $IMAGE_REPO_NAME:$BUILD_NUMBER'
 				sh 'docker ps'
 			}
 		}
@@ -63,7 +63,7 @@ pipeline{
 				//Tagging the image for ECR
 				//sh 'docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:latest $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
 				//Pushing the image to ECR
-				sh "docker login -u AWS -p $AWS_ACCESS_KEY_ID $REPOSITORY_URI"
+				sh 'docker login -u AWS -p $AWS_ACCESS_KEY_ID $REPOSITORY_URI'
 				sh 'docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
                 
 				}   
