@@ -1,17 +1,15 @@
-# Complete Opensource CI/CD Architecture
-![Project architecture](https://camo.githubusercontent.com/7bcff4210c1ea5d80928ea710c4ccf1abcdb8facafd25a028f3080d1eaec21e6/68747470733a2f2f6c756369642e6170702f7075626c69635365676d656e74732f766965772f61366566333233332d376464612d343833612d613636322d6438656339303339356261332f696d6167652e706e67)
 
-## Devops-fully-automated-infracture-deployment
+## Devops-fully-automated-Docker-Image-deployment
 Fully automated and secured Terraform infra pipeline
 
 Testing teh webhook.....
 
 ## CICD Infra setup
 1) ###### GitHub setup
-    Fork GitHub Repository by using the existing repo "effulgencetech-devops-fully-automated-infra" (https://github.com/Michaelgwei86/effulgencetech-devops-fully-automated-infra.git)     
+    Fork GitHub Repository by using the existing repo "effulgencetech-nodejs-repo" (https://github.com/Michaelgwei86/effulgencetech-nodejs-repo.git )     
     - Go to GitHub (github.com)
     - Login to your GitHub Account
-    - **Fork repository "effulgencetech-devops-fully-automated-infra" (https://github.com/Michaelgwei86/effulgencetech-devops-fully-automated-infra.git) & name it "effulgencetech-devops-fully-automated-infra.git"**
+    - **Fork repository "effulgencetech-devops-fully-automated-infra" (https://github.com/Michaelgwei86/effulgencetech-nodejs-repo.git) & name it "effulgencetech-nodejs-repo.git"**
     - Clone your newly created repo to your local
 
 2) ###### Jenkins
