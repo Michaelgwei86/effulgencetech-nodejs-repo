@@ -12,7 +12,7 @@ pipeline{
     	AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
 		IMAGE_REPO_NAME = "michaelgwei86/effulgencetech-nodejs-img"
 		CONTAINER_NAME= "effulgencetech-nodejs-cont-"
-		REPOSITORY_URI = credentials('ecr-credentials')
+		REPOSITORY_URI = credentials('ecr-repo-uri')
 		AWS_DEFAULT_REGION = "us-west-2"
 	}
 
@@ -45,7 +45,7 @@ pipeline{
 			//rename the user name michaelgwei86 with the username of your dockerhub repo
 			steps {
 				//sh 'docker run --name effulgencetech-node-cont-$BUILD_NUMBER -p 8082:8080 -d michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER'
-				sh 'docker run --name $CONTAINER_NAME-$BUILD_NUMBER -p 8086:8080 -d $IMAGE_REPO_NAME:$BUILD_NUMBER'
+				sh 'docker run --name $CONTAINER_NAME-$BUILD_NUMBER -p 8082:8080 -d $IMAGE_REPO_NAME:$BUILD_NUMBER'
 				sh 'docker ps'
 			}
 		}
@@ -66,8 +66,7 @@ pipeline{
 				//Pushing the image to ECR
 				
 				sh 'aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI'
-
-				sh 'docker login -u AWS --password-stdin $AWS_ACCESS_KEY_ID $REPOSITORY_URI'
+			//sh 'aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI'
 				sh 'docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
                 
 				}   
