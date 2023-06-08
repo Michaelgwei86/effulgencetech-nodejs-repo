@@ -10,7 +10,7 @@ pipeline{
 		DOCKERHUB_CREDENTIALS=credentials('DOCKERHUB_CREDENTIALS')
 	    AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
     	AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
-		IMAGE_REPO_NAME = "Michaelgwei86/Effulgencetech-nodejs-img"
+		IMAGE_REPO_NAME = "michaelgwei86/effulgencetech-nodejs-img"
 		REPOSITORY_URI = credentials('ecr-credentials')
 	}
 
