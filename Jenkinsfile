@@ -13,6 +13,7 @@ pipeline{
 		IMAGE_REPO_NAME = "michaelgwei86/effulgencetech-nodejs-img"
 		CONTAINER_NAME= "effulgencetech-nodejs-cont-"
 		REPOSITORY_URI = credentials('ecr-credentials')
+		AWS_DEFAULT_REGION = "us-west-2"
 	}
 
 	stages {
@@ -63,6 +64,9 @@ pipeline{
 				//Tagging the image for ECR
 				//sh 'docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:latest $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
 				//Pushing the image to ECR
+				
+				sh 'aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI'
+
 				sh 'docker login -u AWS -p $AWS_ACCESS_KEY_ID $REPOSITORY_URI'
 				sh 'docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
                 
