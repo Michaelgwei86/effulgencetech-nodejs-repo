@@ -23,6 +23,7 @@ pipeline{
 			steps {
 				//sh 'docker build -t michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER .'
 				sh 'docker build -t $IMAGE_REPO_NAME:$BUILD_NUMBER .'
+				//sh 'docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
 				sh 'docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
 				sh 'docker images'
 			}
