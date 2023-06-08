@@ -9,7 +9,9 @@ pipeline{
 	environment {
 		DOCKERHUB_CREDENTIALS=credentials('DOCKERHUB_CREDENTIALS')
 	    AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
-    	AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')	
+    	AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+		IMAGE_REPO_NAME = "Michaelgwei86/Effulgencetech-nodejs-img"
+		REPOSITORY_URI = credentials('ecr-credentials')
 	}
 
 	stages {
@@ -18,7 +20,8 @@ pipeline{
 			//Building and tagging our Docker image
 			//rename the user name michaelgwei86 with the username of your dockerhub repo
 			steps {
-				sh 'docker build -t michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER .'
+				//sh 'docker build -t michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER .'
+				sh 'docker build -t $IMAGE_REPO_NAME:$BUILD_NUMBER .'
 				sh 'docker images'
 			}
 		}
@@ -34,7 +37,8 @@ pipeline{
 			//Building and tagging our Docker container
 			//rename the user name michaelgwei86 with the username of your dockerhub repo
 			steps {
-				sh 'docker run --name effulgencetech-node-cont-$BUILD_NUMBER -p 8082:8080 -d michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER'
+				//sh 'docker run --name effulgencetech-node-cont-$BUILD_NUMBER -p 8082:8080 -d michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER'
+				sh 'docker run --name $IMAGE_REPO_NAME-$BUILD_NUMBER -p 8081:8080 -d $IMAGE_REPO_NAME:$BUILD_NUMBER'
 				sh 'docker ps'
 			}
 		}
@@ -43,23 +47,21 @@ pipeline{
 		stage('Push to Dockerhub') {
 			//Pushing image to dockerhub
 			steps {
-				sh 'docker push michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER'
+				//sh 'docker push michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER'
+				sh 'docker push $IMAGE_REPO_NAME:$BUILD_NUMBER'
 			}
 		}
 
         stage('Push to ECR') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'ecr-credentials', 
-                                         usernameVariable: 'AWS_ACCESS_KEY_ID', 
-                                         passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) 
-							{
-                    // Login to ECR            
-                    sh "echo $AWS_ACCESS_KEY_ID | docker login --username AWS --password-stdin ${registry}"             
-                    sh "docker push ${registry}/michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER"
-                }   
+
+				sh 'docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
+                
+				}   
             }
-        }
+        
 	}
+
     post { 
         always { 
             echo 'I will always say Hello again!'
