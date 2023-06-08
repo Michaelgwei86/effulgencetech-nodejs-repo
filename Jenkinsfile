@@ -14,6 +14,7 @@ pipeline{
     	AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
 		IMAGE_REPO_NAME = "michaelgwei86/effulgencetech-nodejs-img"
 		CONTAINER_NAME= "effulgencetech-nodejs-cont-"
+		ECR_REPO_NAME = "effulgencetech-nodejs-repo"
 		REPOSITORY_URI = credentials('ecr-repo-uri')
 		AWS_DEFAULT_REGION = "us-west-2"
 	}
@@ -29,8 +30,11 @@ pipeline{
 				sh 'docker build -t $IMAGE_REPO_NAME:$BUILD_NUMBER .'
 
 				//Building image for ECR repo
-				sh 'docker build -t $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER .'
 
+				//sh 'docker build -t $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER .'
+
+				sh 'docker built -t $ECR_REPO_NAME:$BUILD_NUMBER'
+				sh 'docker tag $ECR_REPO_NAME:$BUILD_NUMBER $REPOSITORY_URI/$ECR_REPO_NAME:latest'
 				sh 'docker images'
 			}
 		}
@@ -63,13 +67,15 @@ pipeline{
 
         stage('Push to ECR') {
             steps {
-				//Tagging the image for ECR
-				//sh 'docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:latest $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
-				//Pushing the image to ECR
 				
+				//Logging into ECR repository
 				sh 'aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI'
-			//sh 'aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI'
-				sh 'docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
+			
+				//pushing image to ECR Repository
+
+				sh 'docker push $REPOSITORY_URI/$ECR_REPO_NAME:latest'
+
+				//sh 'docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
                 
 				}   
             }
