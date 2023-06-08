@@ -21,9 +21,13 @@ pipeline{
 			//Building and tagging our Docker image
 			//rename the user name michaelgwei86 with the username of your dockerhub repo
 			steps {
+				//Building image for Dockerhub repo
 				//sh 'docker build -t michaelgwei86/effulgencetech-nodejs-image:$BUILD_NUMBER .'
 				sh 'docker build -t $IMAGE_REPO_NAME:$BUILD_NUMBER .'
-				//sh 'docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
+
+				//Building image for ECR repo
+				sh 'docker build -t $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER .'
+
 				sh 'docker images'
 			}
 		}
@@ -57,7 +61,7 @@ pipeline{
         stage('Push to ECR') {
             steps {
 				//Tagging the image for ECR
-				sh 'docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:latest $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
+				//sh 'docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:latest $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
 				//Pushing the image to ECR
 				sh 'docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER'
                 
