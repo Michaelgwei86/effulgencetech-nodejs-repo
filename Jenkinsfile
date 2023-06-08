@@ -33,7 +33,7 @@ pipeline{
 
 				//sh 'docker build -t $REPOSITORY_URI/$IMAGE_REPO_NAME:$BUILD_NUMBER .'
 
-				sh 'docker built -t $ECR_REPO_NAME:$BUILD_NUMBER'
+				sh 'docker build -t $ECR_REPO_NAME:$BUILD_NUMBER'
 				sh 'docker tag $ECR_REPO_NAME:$BUILD_NUMBER $REPOSITORY_URI/$ECR_REPO_NAME:latest'
 				sh 'docker images'
 			}
