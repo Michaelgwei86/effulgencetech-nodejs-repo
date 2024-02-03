@@ -1,8 +1,8 @@
 
-def COLOR_MAP = [
-    'SUCCESS': 'good', 
-    'FAILURE': 'danger',
-]
+//def COLOR_MAP = [
+//    'SUCCESS': 'good', 
+//    'FAILURE': 'danger',
+//]
 
 pipeline{
 
